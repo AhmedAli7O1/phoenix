@@ -1,0 +1,1 @@
+ngx.header.Server = "phoenix/0.1.0"

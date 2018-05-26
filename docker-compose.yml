@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+
+  redis:
+    image: redis:4.0-alpine
+    networks:
+      - phoenix
+    volumes:
+      - redisdata:/data
+
+  phoenix:
+    build:
+      context: ./phoenix
+    networks:
+      - phoenix
+    depends_on:
+      - redis
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./phoenix:/phoenix:Z
+    environment:
+      - REDIS_SERVER=redis
+
+  example:
+    build: 
+      context: ./sample-server
+    networks:
+      - phoenix
+    volumes:
+      - ./sample-server:/app:Z
+
+networks:
+  phoenix:
+
+volumes:
+  redisdata:
+    driver: local
